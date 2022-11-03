@@ -1,0 +1,93 @@
+enum TransportationModes {
+  DRIVING
+  BICYCLING
+}
+
+type Courier @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  sub: String
+  lat: Float
+  lng: Float
+  transportationMode: TransportationModes
+}
+
+enum OrderStatus {
+  NEW
+  COOKING
+  READY_FOR_PICKUP
+  PICKED_UP
+  COMPLETED
+  ACCEPTED
+  DECLINED_BY_COMPANY
+}
+
+type OrderService @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  quantity: Int
+  Service: Service @hasOne
+  orderID: ID! @index(name: "byOrder")
+}
+
+type Order @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  userID: ID! @index(name: "byUser")
+  Company: Company @hasOne
+  OrderServices: [OrderService] @hasMany(indexName: "byOrder", fields: ["id"])
+  status: OrderStatus
+  Courier: Courier @hasOne
+  total: Float
+}
+
+type Basket @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  userID: ID! @index(name: "byUser")
+  companyID: ID! @index(name: "byCompany")
+  BasketServices: [BasketService] @hasMany(indexName: "byBasket", fields: ["id"])
+}
+
+type BasketService @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  quantity: Int!
+  Service: Service @hasOne
+  basketID: ID! @index(name: "byBasket")
+}
+
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  sub: String!
+  address: String!
+  lng: Float!
+  Baskets: [Basket] @hasMany(indexName: "byUser", fields: ["id"])
+  Orders: [Order] @hasMany(indexName: "byUser", fields: ["id"])
+  lat: Float!
+  tel: String
+}
+
+type Service @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  image: String
+  shortDescription: String
+  description: String
+  price: Float
+  companyID: ID! @index(name: "byCompany")
+}
+
+type Company @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  image: String!
+  deliveryFee: Float!
+  minDeliveryTime: Int!
+  maxDeliveryTime: Int!
+  rating: Int
+  address: String!
+  lat: Float
+  lng: Float
+  Services: [Service] @hasMany(indexName: "byCompany", fields: ["id"])
+  Baskets: [Basket] @hasMany(indexName: "byCompany", fields: ["id"])
+  adminSub: String
+}
+ 

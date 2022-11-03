@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-decocolor-staging-173027-authRole",
+      "UnauthRoleArn": "arn:aws:iam::192445185357:role/amplify-decocolor-staging-173027-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::192445185357:role/amplify-decocolor-staging-173027-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-decocolor-staging-173027-deployment",
+      "UnauthRoleName": "amplify-decocolor-staging-173027-unauthRole",
+      "StackName": "amplify-decocolor-staging-173027",
+      "StackId": "arn:aws:cloudformation:eu-west-2:192445185357:stack/amplify-decocolor-staging-173027/1e812aa0-1d89-11ed-a13b-065db27b71d6",
+      "AmplifyAppId": "dp8wkarcqtfwp"
+    },
+    "categories": {
+      "auth": {
+        "decocolor": {}
+      }
+    }
+  }
+}

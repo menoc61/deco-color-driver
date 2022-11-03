@@ -1,0 +1,811 @@
+
+enum TransportationModes {
+  DRIVING
+  BICYCLING
+}
+
+type Courier @aws_iam @aws_api_key {
+  id: ID!
+  name: String!
+  sub: String
+  lat: Float
+  lng: Float
+  transportationMode: TransportationModes
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+enum OrderStatus {
+  NEW
+  COOKING
+  READY_FOR_PICKUP
+  PICKED_UP
+  COMPLETED
+  ACCEPTED
+  DECLINED_BY_COMPANY
+}
+
+type OrderService @aws_iam @aws_api_key {
+  id: ID!
+  quantity: Int
+  Service: Service
+  orderID: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  orderServiceServiceId: ID
+}
+
+type Order @aws_iam @aws_api_key {
+  id: ID!
+  userID: ID!
+  Company: Company
+  OrderServices(filter: ModelOrderServiceFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelOrderServiceConnection
+  status: OrderStatus
+  Courier: Courier
+  total: Float
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  orderCompanyId: ID
+  orderCourierId: ID
+}
+
+type Basket @aws_iam @aws_api_key {
+  id: ID!
+  userID: ID!
+  companyID: ID!
+  BasketServices(filter: ModelBasketServiceFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelBasketServiceConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type BasketService @aws_iam @aws_api_key {
+  id: ID!
+  quantity: Int!
+  Service: Service
+  basketID: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  basketServiceServiceId: ID
+}
+
+type User @aws_iam @aws_api_key {
+  id: ID!
+  name: String!
+  sub: String!
+  address: String!
+  lng: Float!
+  Baskets(filter: ModelBasketFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelBasketConnection
+  Orders(filter: ModelOrderFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelOrderConnection
+  lat: Float!
+  tel: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Service @aws_iam @aws_api_key {
+  id: ID!
+  name: String!
+  image: String
+  shortDescription: String
+  description: String
+  price: Float
+  companyID: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Company @aws_iam @aws_api_key {
+  id: ID!
+  name: String!
+  image: String!
+  deliveryFee: Float!
+  minDeliveryTime: Int!
+  maxDeliveryTime: Int!
+  rating: Int
+  address: String!
+  lat: Float
+  lng: Float
+  Services(filter: ModelServiceFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelServiceConnection
+  Baskets(filter: ModelBasketFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelBasketConnection
+  adminSub: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelCourierConnection @aws_api_key @aws_iam {
+  items: [Courier]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelTransportationModesInput {
+  eq: TransportationModes
+  ne: TransportationModes
+}
+
+input ModelCourierFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  sub: ModelStringInput
+  lat: ModelFloatInput
+  lng: ModelFloatInput
+  transportationMode: ModelTransportationModesInput
+  and: [ModelCourierFilterInput]
+  or: [ModelCourierFilterInput]
+  not: ModelCourierFilterInput
+}
+
+type Query {
+  getCourier(id: ID!): Courier @aws_api_key @aws_iam
+  listCouriers(filter: ModelCourierFilterInput, limit: Int, nextToken: String): ModelCourierConnection @aws_api_key @aws_iam
+  syncCouriers(filter: ModelCourierFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelCourierConnection @aws_api_key @aws_iam
+  getOrderService(id: ID!): OrderService @aws_api_key @aws_iam
+  listOrderServices(filter: ModelOrderServiceFilterInput, limit: Int, nextToken: String): ModelOrderServiceConnection @aws_api_key @aws_iam
+  syncOrderServices(filter: ModelOrderServiceFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelOrderServiceConnection @aws_api_key @aws_iam
+  getOrder(id: ID!): Order @aws_api_key @aws_iam
+  listOrders(filter: ModelOrderFilterInput, limit: Int, nextToken: String): ModelOrderConnection @aws_api_key @aws_iam
+  syncOrders(filter: ModelOrderFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelOrderConnection @aws_api_key @aws_iam
+  getBasket(id: ID!): Basket @aws_api_key @aws_iam
+  listBaskets(filter: ModelBasketFilterInput, limit: Int, nextToken: String): ModelBasketConnection @aws_api_key @aws_iam
+  syncBaskets(filter: ModelBasketFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelBasketConnection @aws_api_key @aws_iam
+  getBasketService(id: ID!): BasketService @aws_api_key @aws_iam
+  listBasketServices(filter: ModelBasketServiceFilterInput, limit: Int, nextToken: String): ModelBasketServiceConnection @aws_api_key @aws_iam
+  syncBasketServices(filter: ModelBasketServiceFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelBasketServiceConnection @aws_api_key @aws_iam
+  getUser(id: ID!): User @aws_api_key @aws_iam
+  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection @aws_api_key @aws_iam
+  syncUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelUserConnection @aws_api_key @aws_iam
+  getService(id: ID!): Service @aws_api_key @aws_iam
+  listServices(filter: ModelServiceFilterInput, limit: Int, nextToken: String): ModelServiceConnection @aws_api_key @aws_iam
+  syncServices(filter: ModelServiceFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelServiceConnection @aws_api_key @aws_iam
+  getCompany(id: ID!): Company @aws_api_key @aws_iam
+  listCompanies(filter: ModelCompanyFilterInput, limit: Int, nextToken: String): ModelCompanyConnection @aws_api_key @aws_iam
+  syncCompanies(filter: ModelCompanyFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelCompanyConnection @aws_api_key @aws_iam
+}
+
+input ModelCourierConditionInput {
+  name: ModelStringInput
+  sub: ModelStringInput
+  lat: ModelFloatInput
+  lng: ModelFloatInput
+  transportationMode: ModelTransportationModesInput
+  and: [ModelCourierConditionInput]
+  or: [ModelCourierConditionInput]
+  not: ModelCourierConditionInput
+}
+
+input CreateCourierInput {
+  id: ID
+  name: String!
+  sub: String
+  lat: Float
+  lng: Float
+  transportationMode: TransportationModes
+  _version: Int
+}
+
+input UpdateCourierInput {
+  id: ID!
+  name: String
+  sub: String
+  lat: Float
+  lng: Float
+  transportationMode: TransportationModes
+  _version: Int
+}
+
+input DeleteCourierInput {
+  id: ID!
+  _version: Int
+}
+
+type Mutation {
+  createCourier(input: CreateCourierInput!, condition: ModelCourierConditionInput): Courier @aws_api_key @aws_iam
+  updateCourier(input: UpdateCourierInput!, condition: ModelCourierConditionInput): Courier @aws_api_key @aws_iam
+  deleteCourier(input: DeleteCourierInput!, condition: ModelCourierConditionInput): Courier @aws_api_key @aws_iam
+  createOrderService(input: CreateOrderServiceInput!, condition: ModelOrderServiceConditionInput): OrderService @aws_api_key @aws_iam
+  updateOrderService(input: UpdateOrderServiceInput!, condition: ModelOrderServiceConditionInput): OrderService @aws_api_key @aws_iam
+  deleteOrderService(input: DeleteOrderServiceInput!, condition: ModelOrderServiceConditionInput): OrderService @aws_api_key @aws_iam
+  createOrder(input: CreateOrderInput!, condition: ModelOrderConditionInput): Order @aws_api_key @aws_iam
+  updateOrder(input: UpdateOrderInput!, condition: ModelOrderConditionInput): Order @aws_api_key @aws_iam
+  deleteOrder(input: DeleteOrderInput!, condition: ModelOrderConditionInput): Order @aws_api_key @aws_iam
+  createBasket(input: CreateBasketInput!, condition: ModelBasketConditionInput): Basket @aws_api_key @aws_iam
+  updateBasket(input: UpdateBasketInput!, condition: ModelBasketConditionInput): Basket @aws_api_key @aws_iam
+  deleteBasket(input: DeleteBasketInput!, condition: ModelBasketConditionInput): Basket @aws_api_key @aws_iam
+  createBasketService(input: CreateBasketServiceInput!, condition: ModelBasketServiceConditionInput): BasketService @aws_api_key @aws_iam
+  updateBasketService(input: UpdateBasketServiceInput!, condition: ModelBasketServiceConditionInput): BasketService @aws_api_key @aws_iam
+  deleteBasketService(input: DeleteBasketServiceInput!, condition: ModelBasketServiceConditionInput): BasketService @aws_api_key @aws_iam
+  createUser(input: CreateUserInput!, condition: ModelUserConditionInput): User @aws_api_key @aws_iam
+  updateUser(input: UpdateUserInput!, condition: ModelUserConditionInput): User @aws_api_key @aws_iam
+  deleteUser(input: DeleteUserInput!, condition: ModelUserConditionInput): User @aws_api_key @aws_iam
+  createService(input: CreateServiceInput!, condition: ModelServiceConditionInput): Service @aws_api_key @aws_iam
+  updateService(input: UpdateServiceInput!, condition: ModelServiceConditionInput): Service @aws_api_key @aws_iam
+  deleteService(input: DeleteServiceInput!, condition: ModelServiceConditionInput): Service @aws_api_key @aws_iam
+  createCompany(input: CreateCompanyInput!, condition: ModelCompanyConditionInput): Company @aws_api_key @aws_iam
+  updateCompany(input: UpdateCompanyInput!, condition: ModelCompanyConditionInput): Company @aws_api_key @aws_iam
+  deleteCompany(input: DeleteCompanyInput!, condition: ModelCompanyConditionInput): Company @aws_api_key @aws_iam
+}
+
+type Subscription {
+  onCreateCourier: Courier @aws_subscribe(mutations: ["createCourier"]) @aws_api_key @aws_iam
+  onUpdateCourier: Courier @aws_subscribe(mutations: ["updateCourier"]) @aws_api_key @aws_iam
+  onDeleteCourier: Courier @aws_subscribe(mutations: ["deleteCourier"]) @aws_api_key @aws_iam
+  onCreateOrderService: OrderService @aws_subscribe(mutations: ["createOrderService"]) @aws_api_key @aws_iam
+  onUpdateOrderService: OrderService @aws_subscribe(mutations: ["updateOrderService"]) @aws_api_key @aws_iam
+  onDeleteOrderService: OrderService @aws_subscribe(mutations: ["deleteOrderService"]) @aws_api_key @aws_iam
+  onCreateOrder: Order @aws_subscribe(mutations: ["createOrder"]) @aws_api_key @aws_iam
+  onUpdateOrder: Order @aws_subscribe(mutations: ["updateOrder"]) @aws_api_key @aws_iam
+  onDeleteOrder: Order @aws_subscribe(mutations: ["deleteOrder"]) @aws_api_key @aws_iam
+  onCreateBasket: Basket @aws_subscribe(mutations: ["createBasket"]) @aws_api_key @aws_iam
+  onUpdateBasket: Basket @aws_subscribe(mutations: ["updateBasket"]) @aws_api_key @aws_iam
+  onDeleteBasket: Basket @aws_subscribe(mutations: ["deleteBasket"]) @aws_api_key @aws_iam
+  onCreateBasketService: BasketService @aws_subscribe(mutations: ["createBasketService"]) @aws_api_key @aws_iam
+  onUpdateBasketService: BasketService @aws_subscribe(mutations: ["updateBasketService"]) @aws_api_key @aws_iam
+  onDeleteBasketService: BasketService @aws_subscribe(mutations: ["deleteBasketService"]) @aws_api_key @aws_iam
+  onCreateUser: User @aws_subscribe(mutations: ["createUser"]) @aws_api_key @aws_iam
+  onUpdateUser: User @aws_subscribe(mutations: ["updateUser"]) @aws_api_key @aws_iam
+  onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"]) @aws_api_key @aws_iam
+  onCreateService: Service @aws_subscribe(mutations: ["createService"]) @aws_api_key @aws_iam
+  onUpdateService: Service @aws_subscribe(mutations: ["updateService"]) @aws_api_key @aws_iam
+  onDeleteService: Service @aws_subscribe(mutations: ["deleteService"]) @aws_api_key @aws_iam
+  onCreateCompany: Company @aws_subscribe(mutations: ["createCompany"]) @aws_api_key @aws_iam
+  onUpdateCompany: Company @aws_subscribe(mutations: ["updateCompany"]) @aws_api_key @aws_iam
+  onDeleteCompany: Company @aws_subscribe(mutations: ["deleteCompany"]) @aws_api_key @aws_iam
+}
+
+type ModelOrderServiceConnection @aws_api_key @aws_iam {
+  items: [OrderService]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelOrderServiceFilterInput {
+  id: ModelIDInput
+  quantity: ModelIntInput
+  orderID: ModelIDInput
+  and: [ModelOrderServiceFilterInput]
+  or: [ModelOrderServiceFilterInput]
+  not: ModelOrderServiceFilterInput
+  orderServiceServiceId: ModelIDInput
+}
+
+input ModelOrderServiceConditionInput {
+  quantity: ModelIntInput
+  orderID: ModelIDInput
+  and: [ModelOrderServiceConditionInput]
+  or: [ModelOrderServiceConditionInput]
+  not: ModelOrderServiceConditionInput
+  orderServiceServiceId: ModelIDInput
+}
+
+input CreateOrderServiceInput {
+  id: ID
+  quantity: Int
+  orderID: ID!
+  _version: Int
+  orderServiceServiceId: ID
+}
+
+input UpdateOrderServiceInput {
+  id: ID!
+  quantity: Int
+  orderID: ID
+  _version: Int
+  orderServiceServiceId: ID
+}
+
+input DeleteOrderServiceInput {
+  id: ID!
+  _version: Int
+}
+
+type ModelOrderConnection @aws_api_key @aws_iam {
+  items: [Order]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelOrderStatusInput {
+  eq: OrderStatus
+  ne: OrderStatus
+}
+
+input ModelOrderFilterInput {
+  id: ModelIDInput
+  userID: ModelIDInput
+  status: ModelOrderStatusInput
+  total: ModelFloatInput
+  and: [ModelOrderFilterInput]
+  or: [ModelOrderFilterInput]
+  not: ModelOrderFilterInput
+  orderCompanyId: ModelIDInput
+  orderCourierId: ModelIDInput
+}
+
+input ModelOrderConditionInput {
+  userID: ModelIDInput
+  status: ModelOrderStatusInput
+  total: ModelFloatInput
+  and: [ModelOrderConditionInput]
+  or: [ModelOrderConditionInput]
+  not: ModelOrderConditionInput
+  orderCompanyId: ModelIDInput
+  orderCourierId: ModelIDInput
+}
+
+input CreateOrderInput {
+  id: ID
+  userID: ID!
+  status: OrderStatus
+  total: Float
+  _version: Int
+  orderCompanyId: ID
+  orderCourierId: ID
+}
+
+input UpdateOrderInput {
+  id: ID!
+  userID: ID
+  status: OrderStatus
+  total: Float
+  _version: Int
+  orderCompanyId: ID
+  orderCourierId: ID
+}
+
+input DeleteOrderInput {
+  id: ID!
+  _version: Int
+}
+
+type ModelBasketConnection @aws_api_key @aws_iam {
+  items: [Basket]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelBasketFilterInput {
+  id: ModelIDInput
+  userID: ModelIDInput
+  companyID: ModelIDInput
+  and: [ModelBasketFilterInput]
+  or: [ModelBasketFilterInput]
+  not: ModelBasketFilterInput
+}
+
+input ModelBasketConditionInput {
+  userID: ModelIDInput
+  companyID: ModelIDInput
+  and: [ModelBasketConditionInput]
+  or: [ModelBasketConditionInput]
+  not: ModelBasketConditionInput
+}
+
+input CreateBasketInput {
+  id: ID
+  userID: ID!
+  companyID: ID!
+  _version: Int
+}
+
+input UpdateBasketInput {
+  id: ID!
+  userID: ID
+  companyID: ID
+  _version: Int
+}
+
+input DeleteBasketInput {
+  id: ID!
+  _version: Int
+}
+
+type ModelBasketServiceConnection @aws_iam @aws_api_key {
+  items: [BasketService]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelBasketServiceFilterInput {
+  id: ModelIDInput
+  quantity: ModelIntInput
+  basketID: ModelIDInput
+  and: [ModelBasketServiceFilterInput]
+  or: [ModelBasketServiceFilterInput]
+  not: ModelBasketServiceFilterInput
+  basketServiceServiceId: ModelIDInput
+}
+
+input ModelBasketServiceConditionInput {
+  quantity: ModelIntInput
+  basketID: ModelIDInput
+  and: [ModelBasketServiceConditionInput]
+  or: [ModelBasketServiceConditionInput]
+  not: ModelBasketServiceConditionInput
+  basketServiceServiceId: ModelIDInput
+}
+
+input CreateBasketServiceInput {
+  id: ID
+  quantity: Int!
+  basketID: ID!
+  _version: Int
+  basketServiceServiceId: ID
+}
+
+input UpdateBasketServiceInput {
+  id: ID!
+  quantity: Int
+  basketID: ID
+  _version: Int
+  basketServiceServiceId: ID
+}
+
+input DeleteBasketServiceInput {
+  id: ID!
+  _version: Int
+}
+
+type ModelUserConnection @aws_api_key @aws_iam {
+  items: [User]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelUserFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  sub: ModelStringInput
+  address: ModelStringInput
+  lng: ModelFloatInput
+  lat: ModelFloatInput
+  tel: ModelStringInput
+  and: [ModelUserFilterInput]
+  or: [ModelUserFilterInput]
+  not: ModelUserFilterInput
+}
+
+input ModelUserConditionInput {
+  name: ModelStringInput
+  sub: ModelStringInput
+  address: ModelStringInput
+  lng: ModelFloatInput
+  lat: ModelFloatInput
+  tel: ModelStringInput
+  and: [ModelUserConditionInput]
+  or: [ModelUserConditionInput]
+  not: ModelUserConditionInput
+}
+
+input CreateUserInput {
+  id: ID
+  name: String!
+  sub: String!
+  address: String!
+  lng: Float!
+  lat: Float!
+  tel: String
+  _version: Int
+}
+
+input UpdateUserInput {
+  id: ID!
+  name: String
+  sub: String
+  address: String
+  lng: Float
+  lat: Float
+  tel: String
+  _version: Int
+}
+
+input DeleteUserInput {
+  id: ID!
+  _version: Int
+}
+
+type ModelServiceConnection @aws_api_key @aws_iam {
+  items: [Service]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelServiceFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  image: ModelStringInput
+  shortDescription: ModelStringInput
+  description: ModelStringInput
+  price: ModelFloatInput
+  companyID: ModelIDInput
+  and: [ModelServiceFilterInput]
+  or: [ModelServiceFilterInput]
+  not: ModelServiceFilterInput
+}
+
+input ModelServiceConditionInput {
+  name: ModelStringInput
+  image: ModelStringInput
+  shortDescription: ModelStringInput
+  description: ModelStringInput
+  price: ModelFloatInput
+  companyID: ModelIDInput
+  and: [ModelServiceConditionInput]
+  or: [ModelServiceConditionInput]
+  not: ModelServiceConditionInput
+}
+
+input CreateServiceInput {
+  id: ID
+  name: String!
+  image: String
+  shortDescription: String
+  description: String
+  price: Float
+  companyID: ID!
+  _version: Int
+}
+
+input UpdateServiceInput {
+  id: ID!
+  name: String
+  image: String
+  shortDescription: String
+  description: String
+  price: Float
+  companyID: ID
+  _version: Int
+}
+
+input DeleteServiceInput {
+  id: ID!
+  _version: Int
+}
+
+type ModelCompanyConnection @aws_api_key @aws_iam {
+  items: [Company]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelCompanyFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  image: ModelStringInput
+  deliveryFee: ModelFloatInput
+  minDeliveryTime: ModelIntInput
+  maxDeliveryTime: ModelIntInput
+  rating: ModelIntInput
+  address: ModelStringInput
+  lat: ModelFloatInput
+  lng: ModelFloatInput
+  adminSub: ModelStringInput
+  and: [ModelCompanyFilterInput]
+  or: [ModelCompanyFilterInput]
+  not: ModelCompanyFilterInput
+}
+
+input ModelCompanyConditionInput {
+  name: ModelStringInput
+  image: ModelStringInput
+  deliveryFee: ModelFloatInput
+  minDeliveryTime: ModelIntInput
+  maxDeliveryTime: ModelIntInput
+  rating: ModelIntInput
+  address: ModelStringInput
+  lat: ModelFloatInput
+  lng: ModelFloatInput
+  adminSub: ModelStringInput
+  and: [ModelCompanyConditionInput]
+  or: [ModelCompanyConditionInput]
+  not: ModelCompanyConditionInput
+}
+
+input CreateCompanyInput {
+  id: ID
+  name: String!
+  image: String!
+  deliveryFee: Float!
+  minDeliveryTime: Int!
+  maxDeliveryTime: Int!
+  rating: Int
+  address: String!
+  lat: Float
+  lng: Float
+  adminSub: String
+  _version: Int
+}
+
+input UpdateCompanyInput {
+  id: ID!
+  name: String
+  image: String
+  deliveryFee: Float
+  minDeliveryTime: Int
+  maxDeliveryTime: Int
+  rating: Int
+  address: String
+  lat: Float
+  lng: Float
+  adminSub: String
+  _version: Int
+}
+
+input DeleteCompanyInput {
+  id: ID!
+  _version: Int
+}
+

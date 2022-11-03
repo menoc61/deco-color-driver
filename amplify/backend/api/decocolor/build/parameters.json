@@ -1,0 +1,7 @@
+{
+    "AppSyncApiName": "decocolor",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "S3DeploymentBucket": "amplify-decocolor-staging-173027-deployment",
+    "S3DeploymentRootKey": "amplify-appsync-files/a8c72d422704e8639abeda8a55ab06865c266bf4"
+}
